@@ -1,0 +1,4 @@
+name = Fixed header
+description = Добавляет блок с фиксированной шапкой с кнопкой "Добавить в избранное"
+package = Other
+core = 7.x

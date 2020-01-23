@@ -1,0 +1,106 @@
+<?php
+
+/**
+ * Implements hook_block_info().
+ * Информация о блоке и дефолтные настройки.
+ */
+function fixed_header_block_info() {
+  $blocks['fixed-header'] = array(
+    'info' => t('Fixed header'),
+    'cache' => DRUPAL_NO_CACHE,
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ * Генерация заголовка блока и его контента.
+ *
+ */
+function fixed_header_block_view($delta = '') {
+  $block = array();
+
+  if ($delta == 'fixed-header') {
+    $block['subject'] = t('Fixed header');
+    $block['content'] = fixed_header_block_content();
+  }
+
+  return $block;
+}
+
+/**
+ * Implement hook_theme().
+ * Объявление файла темизации блока.
+ *
+ */
+function fixed_header_theme($existing, $type, $theme, $path) {
+
+  return array(
+    // Оформление шапки:
+    'fixed_header_theme' => array(
+      'template' =>  'templates/fixed-header-theme',
+      'original hook' => 'block',
+      'variables' => array(
+         'random_node' => NULL,
+         'flag_favorites' => NULL,
+         'my_favorites_link' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
+ * Сборка содержимого блока шапки.
+ *
+ */
+function fixed_header_block_content() {
+  $module_path = drupal_get_path('module', 'fixed_header');
+  drupal_add_css($module_path . '/templates/fixed-header.css', array('group' => CSS_THEME));
+  drupal_add_js($module_path . '/templates/fixed-header.js', array('group' => JS_THEME));
+
+  $flag_favorites = NULL;
+  $args = arg();
+
+  // Получение id и title случайной ноды и генерация ссылки.
+  $random_node = fixed_header_get_random_node('page');
+  $random_node_link = l($random_node->title, url('node/'. $random_node->nid), array(
+    'attributes' => array(
+      'class' => array('fixed-header__link', '_random_node'),
+      'title' => $random_node->title,
+    )
+  ));
+
+  // Генерация ссылки на избранное пользователя.
+  $my_favorites_link = l('Мое избранное', 'my-favorites', array(
+    'attributes' => array(
+      'class' => array('fixed-header__link')
+    )
+  ));
+
+  if ($args[0] == 'node' && isset($args[1])) {
+    // Получение нужного флага "Избранное". Должен быть создан флаг с машинным именем "favorites".
+    $flag_favorites = flag_create_link('favorites', $args[1]);
+  }
+
+  return theme('fixed_header_theme',
+    array(
+      'random_node' => $random_node_link,
+      'flag_favorites' => $flag_favorites,
+      'my_favorites_link' => $my_favorites_link,
+    )
+  );
+}
+
+/**
+ * Получение случайной ноды из базы с указанным типом.
+ * @param $node_type - тип ноды.
+ * @return
+ */
+function fixed_header_get_random_node($node_type){
+  $query = db_select('node','n');
+  $query->fields('n',array('nid', 'title'))
+    ->condition('n.type', $node_type)
+    ->orderRandom();
+
+  return $query->execute()->fetchObject();
+}
