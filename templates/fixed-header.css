@@ -22,37 +22,46 @@
   opacity: 1;
   transform: translateY(0);
 }
-@media (min-width: 1200px) {
-  .fixed-header._offset-top {
-    top: 40px;
-  }
+.fixed-header._offset-top {
+  top: 30px;
 }
 .fixed-header * {
   box-sizing: border-box;
 }
-.fixed-header__link, .fixed-header__add-favorites a, .fixed-header__my-favorites a {
+.fixed-header__link, .fixed-header__add-favorites a, .fixed-header__add-favorites span.link, .fixed-header__my-favorites a, .fixed-header__my-favorites span.link {
   font-family: "Roboto Condensed", sans-serif;
   font-weight: bold;
   font-size: 12px;
   color: #333333;
+  text-transform: none;
   -webkit-transition: 0.1s color ease-out;
   transition: 0.1s color ease-out;
 }
-.fixed-header__link:hover, .fixed-header__add-favorites a:hover, .fixed-header__my-favorites a:hover {
+.fixed-header__link:hover, .fixed-header__add-favorites a:hover, .fixed-header__add-favorites span.link:hover, .fixed-header__my-favorites a:hover, .fixed-header__my-favorites span.link:hover {
   color: #0088cf;
   text-decoration: none;
 }
 @media (min-width: 1200px) {
-  .fixed-header__link, .fixed-header__add-favorites a, .fixed-header__my-favorites a {
+  .fixed-header__link, .fixed-header__add-favorites a, .fixed-header__add-favorites span.link, .fixed-header__my-favorites a, .fixed-header__my-favorites span.link {
     font-size: 14px;
   }
 }
-.fixed-header__link._random_node, .fixed-header__add-favorites a._random_node, .fixed-header__my-favorites a._random_node {
+.fixed-header__link._random_node, .fixed-header__add-favorites a._random_node, .fixed-header__add-favorites span._random_node.link, .fixed-header__my-favorites a._random_node, .fixed-header__my-favorites span._random_node.link {
   display: block;
   max-width: 125px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+@media (min-width: 1200px) {
+  .fixed-header__link._random_node, .fixed-header__add-favorites a._random_node, .fixed-header__add-favorites span._random_node.link, .fixed-header__my-favorites a._random_node, .fixed-header__my-favorites span._random_node.link {
+    max-width: 300px;
+  }
+}
+@media (min-width: 1600px) {
+  .fixed-header__link._random_node, .fixed-header__add-favorites a._random_node, .fixed-header__add-favorites span._random_node.link, .fixed-header__my-favorites a._random_node, .fixed-header__my-favorites span._random_node.link {
+    max-width: 500px;
+  }
 }
 .fixed-header__wrap {
   width: 100%;
@@ -179,13 +188,14 @@
   padding-right: 10px;
   padding-left: 10px;
 }
-.fixed-header__add-favorites a, .fixed-header__my-favorites a {
+.fixed-header__add-favorites a, .fixed-header__add-favorites span.link, .fixed-header__my-favorites a, .fixed-header__my-favorites span.link {
   display: -webkit-box;
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  text-transform: none;
 }
-.fixed-header__add-favorites a:before, .fixed-header__my-favorites a:before {
+.fixed-header__add-favorites a:before, .fixed-header__add-favorites span.link:before, .fixed-header__my-favorites a:before, .fixed-header__my-favorites span.link:before {
   content: "";
   width: 22px;
   height: 21px;
@@ -193,12 +203,12 @@
   background-image: url(/sites/all/modules/fixed_header/templates/icons-sprite.png);
 }
 @media (min-width: 1200px) {
-  .fixed-header__add-favorites a:before, .fixed-header__my-favorites a:before {
+  .fixed-header__add-favorites a:before, .fixed-header__add-favorites span.link:before, .fixed-header__my-favorites a:before, .fixed-header__my-favorites span.link:before {
     margin-right: 10px;
   }
 }
 @media (max-width: 1200px) {
-  .fixed-header__add-favorites a:before, .fixed-header__my-favorites a:before {
+  .fixed-header__add-favorites a:before, .fixed-header__add-favorites span.link:before, .fixed-header__my-favorites a:before, .fixed-header__my-favorites span.link:before {
     -webkit-transform: scale(0.8);
     transform: scale(0.8);
   }
@@ -211,7 +221,13 @@
 .fixed-header__add-favorites .flag-action:before {
   background-position: 0 0;
 }
-.fixed-header__my-favorites .fixed-header__link:before, .fixed-header__my-favorites a:before {
+.fixed-header__add-favorites .unflag-action:before {
+  background-position: 0px -21px;
+}
+.fixed-header__my-favorites.active {
+  text-decoration: underline;
+}
+.fixed-header__my-favorites .fixed-header__link:before, .fixed-header__my-favorites a:before, .fixed-header__my-favorites span.link:before {
   background-position: -22px 0;
 }
 .fixed-header .flag-favorites {
